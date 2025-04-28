@@ -26,7 +26,6 @@ jobs:
         with:
           version: '~> v2'
           args: release --clean
-          workdir: .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
