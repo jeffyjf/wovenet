@@ -93,7 +93,7 @@ func SetupRouter(config *Config, site *site.Site, app *app.AppManager) (*gin.Eng
 		authorized.GET("/localExposedApps/:appName", c.ShowLocalExposedApp)
 		// remote apps
 		authorized.GET("/remoteApps", c.ListRemoteApps)
-		authorized.GET("/remoteApps/:appName", c.ShowRemoteApp)
+		authorized.GET("/remoteApps/:appId", c.ShowRemoteApp)
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

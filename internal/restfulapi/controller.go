@@ -3,6 +3,7 @@ package restfulapi
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kungze/wovenet/internal/app"
@@ -101,18 +102,22 @@ func (c *controller) ListLocalExposedApps(ctx *gin.Context) {
 //	@Tags			remoteApps
 //	@Accept			json
 //	@Produce		json
-//	@Param			appName	path		string	true	"remote app name"
-//	@Success		200	{object}	app.RemoteAppModel
+//	@Param			appId		path		uint	true	"remote app id"
+//	@Success		200	{object}	app.RemoteAppResponse
 //	@Failure		400	{object}	HTTPError
 //	@Failure		401	{object}	HTTPError
 //	@Failure		404	{object}	HTTPError
 //	@Failure		500	{object}	HTTPError
-//	@Router			/remoteApps/{appName} [get]
+//	@Router			/remoteApps/{appId} [get]
 func (c *controller) ShowRemoteApp(ctx *gin.Context) {
-	appName := ctx.Param("appName")
-	app := c.app.ShowRemoteApp(appName)
+	appId, err := strconv.Atoi(ctx.Param("appId"))
+	if err != nil {
+		NewError(ctx, http.StatusBadRequest, fmt.Errorf("invalid appId: %s", ctx.Param("appId")))
+		return
+	}
+	app := c.app.ShowRemoteApp(uint(appId))
 	if app == nil {
-		NewError(ctx, http.StatusNotFound, fmt.Errorf("remote app: %s not found", appName))
+		NewError(ctx, http.StatusNotFound, fmt.Errorf("remote app: %d not found", appId))
 		return
 	}
 	ctx.JSON(http.StatusOK, app)
@@ -125,12 +130,16 @@ func (c *controller) ShowRemoteApp(ctx *gin.Context) {
 //	@Tags			remoteApps
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{array}		app.RemoteAppModel
+//	@Success		200	{array}		app.RemoteAppResponse
 //	@Failure		401	{object}	HTTPError
 //	@Failure		500	{object}	HTTPError
 //	@Router			/remoteApps [get]
 func (c *controller) ListRemoteApps(ctx *gin.Context) {
-	apps := c.app.GetRemoteApps()
+	apps, err := c.app.GetRemoteApps()
+	if err != nil {
+		NewError(ctx, http.StatusInternalServerError, fmt.Errorf("failed to get remote apps: %w", err))
+		return
+	}
 	ctx.JSON(http.StatusOK, apps)
 }
 

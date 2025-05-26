@@ -13,9 +13,9 @@ type LocalExposedAppConfig struct {
 }
 
 type RemoteAppConfig struct {
-	SiteName    string `json:"siteName" mapstructure:"siteName"`
-	AppName     string `json:"appName" mapstructure:"appName"`
-	LocalSocket string `json:"localSocket" mapstructure:"localSocket"`
+	SiteName    string `json:"siteName" mapstructure:"siteName" gorm:"not null"`
+	AppName     string `json:"appName" mapstructure:"appName" gorm:"not null"`
+	LocalSocket string `json:"localSocket" mapstructure:"localSocket" gorm:"unique;not null"`
 	AppSocket   string `json:"appSocket" mapstructure:"appSocket"`
 }
 

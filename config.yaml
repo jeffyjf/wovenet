@@ -198,3 +198,14 @@ restfulApi:
     basicAuth:
     - user: "admin"
       password: "N0tSecure-Ch@ngeMe"
+
+
+database:
+  # The database driver, currently we only support sqlite
+  # 数据库驱动，目前我们只支持 sqlite
+  driver: sqlite
+  # The database file, if not set, the database will be stored in memory
+  # 数据库文件，如果未设置，数据库将会存储在内存中
+  connection: "/var/lib/wovenet/wovenet.db"
+
+

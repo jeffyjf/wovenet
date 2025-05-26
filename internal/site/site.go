@@ -186,7 +186,7 @@ func (s *Site) onRemoteSiteConnected(ctx context.Context, remoteSite string) {
 			return
 		}
 	}
-	s.appManager.ProcessNewRemoteSite(ctx, remoteSite, info.(*siteInfo).ExposedApps, s.onNewClientConnection)
+	s.appManager.ProcessNewRemoteSite(ctx, remoteSite, info.(*siteInfo).ExposedApps)
 }
 
 // onNewClientConnection callback function, which will be called when an external app client
@@ -302,7 +302,7 @@ func NewSite(ctx context.Context, config Config) (*Site, error) {
 		ctx:         ctx,
 	}
 
-	am, err := app.NewAppManager(ctx, config.LocalExposedApps, config.RemoteApps)
+	am, err := app.NewAppManager(ctx, config.LocalExposedApps, config.RemoteApps, site.onNewClientConnection)
 	if err != nil {
 		log.Error("failed to create app manager", "error", err)
 		return nil, err
